@@ -2,7 +2,15 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #3a5d6f;
+  overflow-x: hidden;
+  /* Lydia Lockhart Brand Colors */
+  --blue-gray: #5488a5;
+  --baby-blue: #5dbdea;
+  --spearmint: #a3c4c3;
+  --powder-blue: #81ABBC;
+  --spearmint-alt: #91a5a1;
+  --yellow: #fbe29c;
 }
 
 @theme inline {
@@ -10,17 +18,25 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Brand color variables for inline theme */
+  --color-blue-gray: var(--blue-gray);
+  --color-baby-blue: var(--baby-blue);
+  --color-spearmint: var(--spearmint);
+  --color-spearmint-alt: var(--spearmint-alt);
+  --color-yellow: var(--yellow);
+  --color-powder-blue: var(--powder-blue);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
 }

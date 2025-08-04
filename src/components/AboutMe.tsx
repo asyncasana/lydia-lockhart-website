@@ -18,16 +18,16 @@ const AboutMe = () => (
     <div className="w-full md:w-2/3">
       <h2 className="text-3xl text-blue-gray font-bold mb-4 text-center">About Me</h2>
       <p className="mb-2 italic text-md">
-        Hi, I'm Lydia Lockhart, a passionate life coach for kids and families.
+        Hi, I&quot;m Lydia Lockhart, a passionate life coach for kids and families.
         Goose, my assistant coach, helps me bring joy and support to every
         session!
       </p>
       <p className="italic text-md">
         My approach combines empathy, creativity, and fun to help children
         discover their strengths and overcome challenges. I believe every child
-        has unique potential, and I'm here to guide them on their journey to
+        has unique potential, and I&quot;m here to guide them on their journey to
         confidence and happiness. I will work with you to create a
-        personalized coaching plan that fits your child's needs and goals. Along with
+        personalized coaching plan that fits your child&quot;s needs and goals. Along with
         Goose, I provide a supportive and engaging environment for growth.
       </p>
     </div>

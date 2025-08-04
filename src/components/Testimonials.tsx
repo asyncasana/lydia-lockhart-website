@@ -22,7 +22,7 @@ const Testimonials = () => (
         {/* Card 3 */}
         <div className="min-w-[250px] max-w-xs bg-white rounded-xl shadow p-4 flex-shrink-0 border border-gray-200 hover:shadow-md hover:shadow-gray-300 transition-shadow duration-300">
           <p className="text-lg mb-2">
-            "Lydia's coaching has made a huge difference in our family dynamic."
+            "Lydia&quot;s coaching has made a huge difference in our family dynamic."
           </p>
           <span className="text-sm text-gray-500">Parent</span>
         </div>

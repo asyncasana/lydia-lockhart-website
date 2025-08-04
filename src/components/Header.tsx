@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const navLinks = [
   { name: "About", href: "#about" },
@@ -17,7 +18,7 @@ const Header = () => {
   return (
     <header className="w-full bg-white flex items-center justify-between mt-4 px-4 py-4 sticky top-0 z-50">
       {/* Logo */}
-      <a href="/">
+      <Link href="/">
         <Image
           src="/wide-logo.svg"
           alt="Lydia Lockhart Logo, line art of a dog and a child"
@@ -25,17 +26,17 @@ const Header = () => {
           height={100}
           draggable={false}
         />
-      </a>
+      </Link>
       {/* Desktop Nav */}
       <nav className="hidden md:flex gap-6">
         {navLinks.map((link) => (
-          <a
+          <Link
             key={link.name}
             href={link.href}
             className="text-blue-gray hover:text-baby-blue font-medium"
           >
             {link.name}
-          </a>
+          </Link>
         ))}
       </nav>
       {/* Mobile Burger */}

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const services = [
   {
@@ -39,15 +40,18 @@ const Services = () => (
       Here To Help
     </h2>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-2 ">
-      {services.map((service, idx) => (
+      {services.map((service) => (
         <div
           key={service.title}
           className="bg-white rounded-xl shadow flex flex-col items-center p-6 hover:shadow-lg transition-shadow duration-300"
         >
-          <img
+          <Image
             src={service.img}
             alt={service.title}
             className="w-full h-48 object-cover rounded-lg mb-6"
+            width={300}
+            height={200}
+            draggable={false}
           />
           <h3 className="text-xl font-semibold mb-4 text-center">
             {service.title}

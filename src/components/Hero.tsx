@@ -15,7 +15,7 @@ const Hero = () => (
     <div className="absolute inset-0 z-10 bg-black opacity-10"></div>
     {/* Content above video */}
     <div className="relative z-20 flex flex-col items-center justify-center w-full">
-      <h1 className="text-4xl text-white md:text-6xl font-extrabold mb-4">
+      <h1 className="text-2xl text-white md:text-6xl font-extrabold mb-4">
         Helping Little Minds Grow
       </h1>
       <p className="text-lg text-white md:text-2xl max-w-2xl mx-auto mb-6">

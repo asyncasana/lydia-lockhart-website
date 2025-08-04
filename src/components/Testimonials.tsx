@@ -8,21 +8,21 @@ const Testimonials = () => (
         {/* Card 1 */}
         <div className="min-w-[250px] max-w-xs bg-white rounded-xl shadow p-4 flex-shrink-0 border border-gray-200 hover:shadow-md hover:shadow-gray-300 transition-shadow duration-300">
           <p className="text-lg mb-2">
-            "Lydia helped my child gain confidence and happiness!"
+            &quot;Lydia helped my child gain confidence and happiness!&quot;
           </p>
           <span className="text-sm text-gray-500">Parent</span>
         </div>
         {/* Card 2 */}
         <div className="min-w-[250px] max-w-xs bg-white rounded-xl shadow p-4 flex-shrink-0 border border-gray-200 hover:shadow-md hover:shadow-gray-300 transition-shadow duration-300">
           <p className="text-lg mb-2">
-            "Goose is the best assistant coach ever!"
+            &quot;Goose is the best assistant coach ever!&quot;
           </p>
           <span className="text-sm text-gray-500">Child</span>
         </div>
         {/* Card 3 */}
         <div className="min-w-[250px] max-w-xs bg-white rounded-xl shadow p-4 flex-shrink-0 border border-gray-200 hover:shadow-md hover:shadow-gray-300 transition-shadow duration-300">
           <p className="text-lg mb-2">
-            "Lydia&quot;s coaching has made a huge difference in our family dynamic."
+            &quot;Lydia&&apos;s coaching has made a huge difference in our family dynamic.&quot;
           </p>
           <span className="text-sm text-gray-500">Parent</span>
         </div>

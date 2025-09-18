@@ -1,6 +1,5 @@
 import React from "react";
-import { Testimonial, PortableText } from "@/lib/sanity";
-import { portableTextComponents } from "@/components/PortableTextComponents";
+import { Testimonial } from "@/lib/sanity";
 import ScrollAnimation from "./ScrollAnimation";
 
 interface TestimonialsProps {

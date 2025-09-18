@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import ScrollAnimation from "./ScrollAnimation";
 
 const ContactForm = () => {
@@ -49,7 +50,7 @@ const ContactForm = () => {
       <ScrollAnimation animation="fadeUp" delay={200}>
         <div className="w-full max-w-2xl mx-auto text-center text-gray-700">
           <p className="mb-6 text-md">
-            Please fill out the form below to get in touch. I'll get back to you
+            Please fill out the form below to get in touch. I&apos;ll get back to you
             as soon as possible.
           </p>
         </div>
@@ -89,9 +90,9 @@ const ContactForm = () => {
             />
             <span>
               By submitting, I agree to the{" "}
-              <a href="/terms" className="underline text-yellow-600">
+              <Link href="/terms" className="underline text-yellow-600">
                 T&amp;Cs
-              </a>
+              </Link>
             </span>
           </label>
           <button

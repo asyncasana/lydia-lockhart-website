@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import { AboutData, PortableText } from "@/lib/sanity";
-import { portableTextComponents } from "@/components/PortableTextComponents";
-import ScrollAnimation from "./ScrollAnimation";
+import { AboutData } from "@/lib/sanity";
+import ScrollAnimation from "@/components/ScrollAnimation";
 
 interface AboutMeProps {
   aboutData?: AboutData;

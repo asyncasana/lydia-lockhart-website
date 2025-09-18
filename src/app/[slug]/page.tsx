@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getPage, getFooterData, getFooterPages } from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
 import { portableTextComponents } from "@/components/PortableTextComponents";
@@ -27,12 +28,12 @@ export default async function DynamicPage({ params }: PageProps) {
       {/* Header Navigation */}
       <nav className="w-full bg-white shadow-sm p-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <a
+          <Link
             href="/"
             className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors"
           >
             ← Back to Home
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -52,8 +53,8 @@ export default async function DynamicPage({ params }: PageProps) {
 
           <div className="prose prose-lg max-w-none">
             <PortableText
-              value={pageData.content as any}
-              components={portableTextComponents as any}
+              value={pageData.content as never}
+              components={portableTextComponents as never}
             />
           </div>
         </article>

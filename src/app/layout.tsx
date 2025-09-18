@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata = {
   title: "Lydia Lockhart | Helping Little Minds Grow",
-  description: "Life coaching for kids and families. Discover your strengths and thrive with Lydia and Goose!",
+  description:
+    "Life coaching for kids and families. Discover your strengths and thrive with Lydia and Goose!",
   openGraph: {
     title: "Lydia Lockhart | Helping Little Minds Grow",
-    description: "Life coaching for kids and families. Discover your strengths and thrive with Lydia and Goose!",
+    description:
+      "Life coaching for kids and families. Discover your strengths and thrive with Lydia and Goose!",
     url: "https://yourdomain.com",
     siteName: "Lydia Lockhart",
     images: [
@@ -23,7 +24,8 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Lydia Lockhart | Helping Little Minds Grow",
-    description: "Life coaching for kids and families. Discover your strengths and thrive with Lydia and Goose!",
+    description:
+      "Life coaching for kids and families. Discover your strengths and thrive with Lydia and Goose!",
     images: ["/og-image.jpg"],
   },
 };
@@ -35,9 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,37 +1,70 @@
 import React from "react";
 import Image from "next/image";
+import { AboutData, PortableText } from "@/lib/sanity";
+import { portableTextComponents } from "@/components/PortableTextComponents";
+import ScrollAnimation from "./ScrollAnimation";
 
-const AboutMe = () => (
-  <section className="py-10 px-12 bg-white text-gray-700 flex flex-col md:flex-row items-center gap-8">
-    {/* Photo left */}
-    <div className="w-full md:w-1/3 flex justify-center mb-6 md:mb-0">
-        <Image
-            src="/about-me.jpg"
-            alt="Lydia Lockhart and Goose the dog / assistant coach"
-            width={300}
-            height={300}
-            className="rounded-full hover:shadow-lg transition-shadow duration-300 shadow-powder-blue"
-            draggable={false}
-        />
-    </div>
-    {/* Text right */}
-    <div className="w-full md:w-2/3">
-      <h2 className="text-3xl text-blue-gray font-bold mb-4 text-center">About Me</h2>
-      <p className="mb-2 italic text-md">
-        Hi, I&apos;m Lydia Lockhart, a passionate life coach for kids and families.
-        Goose, my assistant coach, helps me bring joy and support to every
-        session!
-      </p>
-      <p className="italic text-md">
-        My approach combines empathy, creativity, and fun to help children
-        discover their strengths and overcome challenges. I believe every child
-        has unique potential, and I&apos;m here to guide them on their journey to
-        confidence and happiness. I will work with you to create a
-        personalized coaching plan that fits your child&apos;s needs and goals. Along with
-        Goose, I provide a supportive and engaging environment for growth.
-      </p>
-    </div>
-  </section>
-);
+interface AboutMeProps {
+  aboutData?: AboutData;
+}
+
+const AboutMe = ({ aboutData }: AboutMeProps) => {
+  // Only use Sanity data - no fallbacks to make issues visible
+  if (!aboutData) {
+    return (
+      <section className="py-10 px-12 bg-white text-gray-700">
+        <div className="text-center text-gray-500">
+          <p>About Me section - Sanity data not available</p>
+        </div>
+      </section>
+    );
+  }
+
+  const title = aboutData.highlight;
+  const imageUrl = aboutData.image?.asset?.url;
+  const imageAlt = aboutData.image?.alt;
+
+  return (
+    <section className="py-10 px-12 bg-white text-gray-700">
+      <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
+        {/* Photo left - only show if image exists */}
+        {imageUrl && (
+          <div className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0">
+            <ScrollAnimation animation="fadeRight" delay={200}>
+              <div className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0">
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt || "About image"}
+                  fill
+                  sizes="(max-width: 768px) 256px, 320px"
+                  className="rounded-full hover:shadow-lg transition-shadow duration-300 shadow-powder-blue object-cover"
+                  draggable={false}
+                />
+              </div>
+            </ScrollAnimation>
+          </div>
+        )}
+
+        {/* Text right - only show if title or bio exists */}
+        {(title || aboutData.bio) && (
+          <div className={`w-full ${imageUrl ? "md:w-1/2" : "md:w-full"}`}>
+            <ScrollAnimation animation="fadeLeft" delay={400}>
+              {title && (
+                <h2 className="text-3xl text-blue-gray font-bold mb-4 text-center md:text-left">
+                  {title}
+                </h2>
+              )}
+              {aboutData.bio && (
+                <div className="italic text-md whitespace-pre-line">
+                  {aboutData.bio}
+                </div>
+              )}
+            </ScrollAnimation>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
 
 export default AboutMe;

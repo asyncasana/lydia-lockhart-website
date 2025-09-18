@@ -1,0 +1,424 @@
+// This file contains helper functions and types for integrating with Sanity CMS
+// These functions are currently placeholders and should be implemented once Sanity is properly connected
+
+import { MenuItem } from "../components/Header";
+import { SocialLink, AdditionalLink } from "../components/Footer";
+
+// Sanity client setup
+import { createClient } from "@sanity/client";
+
+export const sanityClient = createClient({
+  projectId: "rb1epwnp",
+  dataset: "production",
+  useCdn: true,
+  apiVersion: "2024-01-01",
+});
+
+// Hero Section Types and Queries
+export interface HeroData {
+  headline: string;
+  subheadline: string;
+  backgroundMedia: {
+    mediaType: "video" | "image";
+    videoUrl?: string;
+    image?: {
+      asset: {
+        url: string;
+      };
+      alt?: string;
+    };
+  };
+  ctaText: string;
+  ctaUrl: string;
+}
+
+export async function getHeroData(): Promise<HeroData | null> {
+  try {
+    const query = `*[_type == "hero"][0] {
+      headline,
+      subheadline,
+      backgroundMedia {
+        mediaType,
+        videoUrl,
+        image {
+          asset->{url},
+          alt
+        }
+      },
+      ctaText,
+      ctaUrl
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching hero data:", error);
+    return null;
+  }
+}
+
+// Navigation Types and Queries
+export interface NavigationData {
+  logo?: {
+    asset: {
+      url: string;
+    };
+  };
+  menuItems: MenuItem[];
+  showBlogLink: boolean;
+  showFaqLink: boolean;
+  ctaButton?: {
+    text: string;
+    url: string;
+    isVisible: boolean;
+  };
+}
+
+export async function getNavigationData(): Promise<NavigationData | null> {
+  try {
+    const query = `*[_type == "navigation"][0] {
+      logo {
+        asset->{url}
+      },
+      menuItems[] {
+        label,
+        url,
+        isActive,
+        openInNewTab
+      },
+      showBlogLink,
+      showFaqLink,
+      ctaButton {
+        text,
+        url,
+        isVisible
+      }
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching navigation data:", error);
+    return null;
+  }
+}
+
+// Footer Types and Queries
+export interface FooterData {
+  footerText?: string;
+  socialLinks?: SocialLink[];
+  copyrightText?: string;
+  additionalLinks?: AdditionalLink[];
+}
+
+export async function getFooterData(): Promise<FooterData | null> {
+  try {
+    const result = await sanityClient.fetch(`
+      *[_type == "settings"][0] {
+        footer {
+          footerText,
+          socialLinks[] {
+            platform,
+            url,
+            isVisible
+          },
+          additionalLinks[] {
+            label,
+            url,
+            isVisible
+          },
+          copyrightText
+        }
+      }
+    `);
+    return result?.footer || null;
+  } catch (error) {
+    console.error("Error fetching footer data:", error);
+    return null;
+  }
+}
+
+// Blog Types and Queries
+export interface BlogPost {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  featuredImage?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+  content: unknown[]; // Portable Text content
+  publishedAt: string;
+  isPublished: boolean;
+}
+
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  try {
+    const query = `*[_type == "blog" && isPublished == true] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      excerpt,
+      featuredImage {
+        asset->{url},
+        alt
+      },
+      content,
+      publishedAt,
+      isPublished
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    return [];
+  }
+}
+
+export async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  try {
+    const query = `*[_type == "blog" && slug.current == $slug && isPublished == true][0] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      featuredImage {
+        asset->{url},
+        alt
+      },
+      content,
+      publishedAt,
+      isPublished
+    }`;
+    return await sanityClient.fetch(query, { slug });
+  } catch (error) {
+    console.error("Error fetching blog post:", error);
+    return null;
+  }
+}
+
+// FAQ Types and Queries
+export interface FAQ {
+  _id: string;
+  question: string;
+  answer: unknown[]; // Portable Text content
+  category: string;
+  order?: number;
+  isActive: boolean;
+}
+
+export interface FAQCategory {
+  name: string;
+  faqs: FAQ[];
+}
+
+export async function getFAQs(): Promise<FAQCategory[]> {
+  try {
+    const query = `*[_type == "faq" && isActive == true] | order(category asc, order asc) {
+      _id,
+      question,
+      answer,
+      category,
+      order,
+      isActive
+    }`;
+    const faqs = await sanityClient.fetch(query);
+
+    // Group FAQs by category
+    const categoriesMap = new Map<string, FAQ[]>();
+    faqs.forEach((faq: FAQ) => {
+      const category = faq.category || "general";
+      if (!categoriesMap.has(category)) {
+        categoriesMap.set(category, []);
+      }
+      categoriesMap.get(category)!.push(faq);
+    });
+
+    return Array.from(categoriesMap.entries()).map(([name, faqs]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      faqs,
+    }));
+  } catch (error) {
+    console.error("Error fetching FAQs:", error);
+    return [];
+  }
+}
+
+// Service Types and Queries
+export interface Service {
+  _id: string;
+  title: string;
+  description?: string;
+  icon?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+  order?: number;
+}
+
+export async function getServices(): Promise<Service[]> {
+  try {
+    const query = `*[_type == "service"] | order(order asc) {
+      _id,
+      title,
+      description,
+      icon {
+        asset->{url},
+        alt
+      },
+      order
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    return [];
+  }
+}
+
+// Resource Types and Queries
+export interface Resource {
+  _id: string;
+  title: string;
+  description?: string;
+  image?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+  url: string;
+  order?: number;
+}
+
+export async function getResources(): Promise<Resource[]> {
+  try {
+    const query = `*[_type == "resource"] | order(order asc) {
+      _id,
+      title,
+      description,
+      image {
+        asset->{url},
+        alt
+      },
+      url,
+      order
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching resources:", error);
+    return [];
+  }
+}
+
+// About Types and Queries
+export interface AboutData {
+  _id: string;
+  highlight?: string; // This is your "title" field
+  bio?: string; // This is your content field (plain text, not Portable Text)
+  image?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+}
+
+export async function getAboutData(): Promise<AboutData | null> {
+  try {
+    const query = `*[_type == "about"][0] {
+      _id,
+      highlight,
+      bio,
+      image {
+        asset->{url},
+        alt
+      }
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching about data:", error);
+    return null;
+  }
+}
+
+// Testimonial Types and Queries
+export interface Testimonial {
+  _id: string;
+  name?: string; // This is your "author" field
+  role?: string;
+  text?: string; // This is your content field (plain text, not Portable Text)
+  image?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const query = `*[_type == "testimonial"] | order(_createdAt desc) {
+      _id,
+      name,
+      role,
+      text,
+      image {
+        asset->{url},
+        alt
+      }
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching testimonials:", error);
+    return [];
+  }
+}
+
+// Static Page Types and Queries
+export interface PageData {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  content: unknown[]; // Portable Text content
+  metaDescription?: string;
+  isPublished: boolean;
+  showInFooter: boolean;
+  footerOrder?: number;
+}
+
+export async function getPage(slug: string): Promise<PageData | null> {
+  try {
+    const query = `*[_type == "page" && slug.current == $slug && isPublished == true][0] {
+      _id,
+      title,
+      slug,
+      content,
+      metaDescription,
+      isPublished,
+      showInFooter,
+      footerOrder
+    }`;
+    return await sanityClient.fetch(query, { slug });
+  } catch (error) {
+    console.error("Error fetching page:", error);
+    return null;
+  }
+}
+
+export async function getFooterPages(): Promise<PageData[]> {
+  try {
+    const query = `*[_type == "page" && isPublished == true && showInFooter == true] | order(footerOrder asc) {
+      _id,
+      title,
+      slug,
+      footerOrder
+    }`;
+    return await sanityClient.fetch(query);
+  } catch (error) {
+    console.error("Error fetching footer pages:", error);
+    return [];
+  }
+}
+
+// Export PortableText for use in components
+export { PortableText } from "@portabletext/react";

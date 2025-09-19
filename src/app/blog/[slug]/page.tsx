@@ -1,3 +1,6 @@
+// Force dynamic rendering for instant Sanity content updates
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";

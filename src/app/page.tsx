@@ -1,3 +1,6 @@
+// Force dynamic rendering for instant Sanity content updates
+export const dynamic = "force-dynamic";
+
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import AboutMe from "@/components/AboutMe";

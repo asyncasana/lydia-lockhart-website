@@ -1,3 +1,6 @@
+// Force dynamic rendering for instant Sanity content updates
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPage, getFooterData, getFooterPages } from "@/lib/sanity";

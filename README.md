@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lydia Lockhart Website
 
-## Getting Started
+This project is a modern website for Lydia Lockhart, built with [Next.js](https://nextjs.org) and powered by [Sanity Studio](https://www.sanity.io/) for content management.
+
+---
+
+## 🚀 Content Management (Sanity Studio)
+
+All website content is managed via Sanity Studio:
+
+- **Admin Panel:** https://lydialockhart.sanity.studio/
+- **Login:** Use your Google account or the method provided.
+
+### Content Structure
+
+- **Settings:** Site-wide info (contact, social links, etc.)
+- **Navigation:** Main menu links
+- **Homepage Sections:** Hero, About, Services, Testimonials, Resources
+- **Blog:** Blog posts
+- **FAQ:** Frequently asked questions
+- **Legal Pages:** Terms, Privacy Policy, etc.
+
+### Editing Content
+
+1. Click a section in the left sidebar.
+2. Click an item to edit, or “Create new” to add.
+3. Make changes in the editor fields.
+4. Click “Publish” (top right) to make changes live.
+
+#### Legal Pages
+
+- Go to “Legal Pages”
+- Edit or create a page (e.g., Terms and Conditions)
+- Fill in title, content, meta description
+- Set “Published” to true
+- Toggle “Show in Footer” if you want it in the website footer
+- Click “Publish”
+
+#### Homepage Sections
+
+- Edit Hero, About, Services, Testimonials, Resources as above
+- Changes appear instantly after publishing (no redeploy needed)
+
+#### Blog & FAQ
+
+- Blog: Add/edit posts, set publish status
+- FAQ: Add/edit questions and answers
+
+#### Previewing Changes
+
+- After publishing, refresh the live site to see updates
+
+#### Support
+
+- For technical issues, contact your web developer
+
+---
+
+## 🛠️ Local Development
 
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌐 Deployment & Environment Variables
 
-## Learn More
+This site is deployed on [Vercel](https://vercel.com/).
 
-To learn more about Next.js, take a look at the following resources:
+### Required Environment Variables (set in Vercel dashboard):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `RESEND_API_KEY` — for contact form email delivery
+- `CONTACT_EMAIL` — (optional) recipient for contact form
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Add these in Vercel → Project → Settings → Environment Variables.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📚 Learn More
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Sanity Documentation](https://www.sanity.io/docs)
+
+---

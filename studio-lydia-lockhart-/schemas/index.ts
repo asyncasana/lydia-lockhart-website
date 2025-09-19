@@ -18,14 +18,14 @@ export const schemaTypes = [
   // Site settings (most important, should be first)
   settings,
   navigation,
-  
+
   // Homepage content (in order they appear)
   hero,
   about,
   service,
   testimonial,
   resource,
-  
+
   // Additional content
   blog,
   faq,

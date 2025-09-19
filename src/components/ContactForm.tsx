@@ -90,7 +90,10 @@ const ContactForm = () => {
             />
             <span>
               By submitting, I agree to the{" "}
-              <Link href="/terms" className="underline text-yellow-600">
+              <Link
+                href="/terms-and-conditions"
+                className="underline text-yellow-600"
+              >
                 T&amp;Cs
               </Link>
             </span>

@@ -50,8 +50,8 @@ const ContactForm = () => {
       <ScrollAnimation animation="fadeUp" delay={200}>
         <div className="w-full max-w-2xl mx-auto text-center text-gray-700">
           <p className="mb-6 text-md">
-            Please fill out the form below to get in touch. I&apos;ll get back to you
-            as soon as possible.
+            Please fill out the form below to get in touch. I&apos;ll get back
+            to you as soon as possible.
           </p>
         </div>
       </ScrollAnimation>

@@ -1,0 +1,8 @@
+# Ignore Sanity Studio folder during Vercel build
+studio-lydia-lockhart-/
+
+# Ignore test files
+test-*.js
+
+# Ignore local development files
+.env.local

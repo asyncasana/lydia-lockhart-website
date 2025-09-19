@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  typescript: {
+    // Ignore TypeScript errors in Sanity Studio folder during build
+    ignoreBuildErrors: false,
+  },
+  typedRoutes: false,
 };
 
 export default nextConfig;

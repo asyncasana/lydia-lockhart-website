@@ -2,6 +2,7 @@
 export const dynamic = "force-dynamic";
 
 import { Metadata } from "next";
+import Link from "next/link";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import {
@@ -120,12 +121,12 @@ export default async function FAQPage() {
                 We&apos;re here to help! Get in touch with us for personalized
                 answers.
               </p>
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 className="inline-block bg-blue-gray text-white font-semibold px-6 py-3 rounded-lg hover:bg-powder-blue transition-colors"
               >
                 Contact Us
-              </a>
+              </Link>
             </div>
           </div>
         </div>

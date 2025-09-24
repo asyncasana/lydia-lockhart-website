@@ -11,7 +11,7 @@ import { createClient } from "@sanity/client";
 export const sanityClient = createClient({
   projectId: "rb1epwnp",
   dataset: "production",
-  useCdn: true,
+  useCdn: false, // Disable CDN for fresh data
   apiVersion: "2024-01-01",
 });
 
@@ -611,9 +611,16 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       },
       shortText,
       fullText,
-      text
+      text,
+      "allFields": *
     }`;
-    return await sanityClient.fetch(query);
+    return await sanityClient.fetch(
+      query,
+      {},
+      {
+        cache: "no-cache",
+      }
+    );
   } catch (error) {
     console.error("Error fetching testimonials:", error);
     return [];

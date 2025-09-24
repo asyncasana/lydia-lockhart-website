@@ -67,19 +67,29 @@ const Header = ({ navigationData }: HeaderProps) => {
   const logoUrl = navigationData?.logo?.asset?.url;
 
   // Create dynamic navigation items including conditional Blog/FAQ links
-  const blogLink = navigationData?.showBlogLink === true ? [{
-    label: "Blog",
-    url: "/blog",
-    isActive: true,
-    openInNewTab: false,
-  }] : [];
+  const blogLink =
+    navigationData?.showBlogLink === true
+      ? [
+          {
+            label: "Blog",
+            url: "/blog",
+            isActive: true,
+            openInNewTab: false,
+          },
+        ]
+      : [];
 
-  const faqLink = navigationData?.showFaqLink === true ? [{
-    label: "FAQ",
-    url: "/faq",
-    isActive: true,
-    openInNewTab: false,
-  }] : [];
+  const faqLink =
+    navigationData?.showFaqLink === true
+      ? [
+          {
+            label: "FAQ",
+            url: "/faq",
+            isActive: true,
+            openInNewTab: false,
+          },
+        ]
+      : [];
 
   const allNavItems = [...menuItems, ...blogLink, ...faqLink];
 

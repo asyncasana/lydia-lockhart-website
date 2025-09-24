@@ -4,11 +4,12 @@ import Image from "next/image";
 import { Testimonial } from "@/lib/sanity";
 import ScrollAnimation from "./ScrollAnimation";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 interface TestimonialsProps {
   testimonialsData?: Testimonial[];
@@ -18,49 +19,38 @@ interface TestimonialsProps {
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Get display text - prioritize new fields, fall back to legacy
-  const fullText =
-    testimonial.fullText ||
-    testimonial.text ||
-    testimonial.shortText ||
-    "No testimonial available";
+  // Get display text - prioritize short text for initial display
+  const shortText = testimonial.shortText || "No testimonial available";
+  const fullText = testimonial.fullText || testimonial.text || shortText;
 
-  // Create truncated version (approximately 3 lines worth of characters)
-  const truncatedText =
-    fullText.length > 150 ? fullText.substring(0, 150) + "..." : fullText;
-  const hasExpandableContent = fullText.length > 150;
+  // Show short text initially, full text when expanded
+  const displayText = isExpanded ? fullText : shortText;
+  const hasExpandableContent =
+    fullText !== shortText && fullText.length > shortText.length;
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
-    // Force height recalculation after state change
+    // Recalculate heights after content change
     setTimeout(() => {
-      const swiperSlides = document.querySelectorAll(
-        ".testimonials-carousel .swiper-slide"
-      );
-      swiperSlides.forEach((slide) => {
-        const slideElement = slide as HTMLElement;
-        slideElement.style.height = "auto";
-      });
+      if ((window as any).recalculateTestimonialHeights) {
+        (window as any).recalculateTestimonialHeights();
+      }
     }, 50);
   };
 
-  // Reset heights on mount and state changes
+  // Trigger height recalculation when expansion state changes
   useEffect(() => {
     const timer = setTimeout(() => {
-      const swiperSlides = document.querySelectorAll(
-        ".testimonials-carousel .swiper-slide"
-      );
-      swiperSlides.forEach((slide) => {
-        const slideElement = slide as HTMLElement;
-        slideElement.style.height = "auto";
-      });
+      if ((window as any).recalculateTestimonialHeights) {
+        (window as any).recalculateTestimonialHeights();
+      }
     }, 100);
 
     return () => clearTimeout(timer);
   }, [isExpanded]);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col border border-gray-200 hover:shadow-xl transition-all duration-300 h-full w-full">
+    <div className="testimonial-card-inner bg-white rounded-xl shadow-lg p-6 flex flex-col border border-gray-200 hover:shadow-xl transition-all duration-300 h-full w-full">
       {/* Author Info */}
       <div className="flex items-center mb-4">
         {testimonial.image?.asset?.url && (
@@ -90,7 +80,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
       {/* Testimonial Content */}
       <div className="flex-grow">
         <div className="text-gray-700 leading-relaxed">
-          <p>&ldquo;{isExpanded ? fullText : truncatedText}&rdquo;</p>
+          <p>&ldquo;{displayText}&rdquo;</p>
         </div>
 
         {/* Expand/Collapse Button */}
@@ -111,6 +101,62 @@ const Testimonials = ({
   testimonialsData,
   backgroundImage,
 }: TestimonialsProps) => {
+  const [cardHeight, setCardHeight] = useState<number | null>(null);
+
+  // Debug logging
+  console.log("Testimonials data:", testimonialsData);
+
+  // Function to calculate and set uniform height
+  const calculateUniformHeight = () => {
+    const cards = document.querySelectorAll(".testimonial-card-inner");
+    if (cards.length === 0) return;
+
+    // Reset heights to auto to get natural heights
+    cards.forEach((card) => {
+      (card as HTMLElement).style.height = "auto";
+    });
+
+    // Calculate the tallest card height
+    let maxHeight = 0;
+    cards.forEach((card) => {
+      const height = (card as HTMLElement).offsetHeight;
+      maxHeight = Math.max(maxHeight, height);
+    });
+
+    // Set all cards to the tallest height
+    if (maxHeight > 0) {
+      setCardHeight(maxHeight);
+      cards.forEach((card) => {
+        (card as HTMLElement).style.height = `${maxHeight}px`;
+      });
+    }
+  };
+
+  // Recalculate heights when testimonials data changes or component mounts
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      calculateUniformHeight();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [testimonialsData]);
+
+  // Make calculateUniformHeight available globally for card expansion
+  useEffect(() => {
+    (window as any).recalculateTestimonialHeights = calculateUniformHeight;
+
+    // Add window resize listener to recalculate heights
+    const handleResize = () => {
+      setTimeout(() => calculateUniformHeight(), 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      delete (window as any).recalculateTestimonialHeights;
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   if (!testimonialsData || testimonialsData.length === 0) {
     return (
       <section className="py-12 px-6 text-gray-800 w-full bg-gray-50">
@@ -144,14 +190,45 @@ const Testimonials = ({
         </ScrollAnimation>
 
         <ScrollAnimation animation="fadeUp" delay={200}>
-          <div className="px-4 md:px-6">
+          <div className="px-4 md:px-6 relative">
+            {/* Navigation Arrows */}
+            <div className="testimonials-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-lg w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="15,18 9,12 15,6"></polyline>
+              </svg>
+            </div>
+            <div className="testimonials-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-lg w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="9,18 15,12 9,6"></polyline>
+              </svg>
+            </div>
+
             <Swiper
-              modules={[Pagination, Autoplay]}
+              modules={[Pagination, Autoplay, Navigation]}
               spaceBetween={20}
               slidesPerView={1}
               pagination={{
                 clickable: true,
-                dynamicBullets: true,
+                dynamicBullets: false,
+                el: ".testimonials-pagination",
+              }}
+              navigation={{
+                nextEl: ".testimonials-button-next",
+                prevEl: ".testimonials-button-prev",
               }}
               autoplay={{
                 delay: 6000,
@@ -167,69 +244,75 @@ const Testimonials = ({
                   spaceBetween: 30,
                 },
               }}
-              className="testimonials-carousel pb-16"
-              style={
-                {
-                  "--swiper-pagination-bottom": "0px",
-                } as React.CSSProperties
-              }
-              onSlideChange={() => {
-                // Force height recalculation on slide change
-                setTimeout(() => {
-                  const swiperSlides = document.querySelectorAll(
-                    ".testimonials-carousel .swiper-slide"
-                  );
-                  swiperSlides.forEach((slide) => {
-                    const slideElement = slide as HTMLElement;
-                    slideElement.style.height = "auto";
-                  });
-                }, 100);
-              }}
+              className="testimonials-carousel px-12"
             >
               {testimonialsData.map((testimonial) => (
                 <SwiperSlide key={testimonial._id} className="h-auto">
-                  <div className="h-full min-h-[300px] flex">
-                    <TestimonialCard testimonial={testimonial} />
-                  </div>
+                  <TestimonialCard testimonial={testimonial} />
                 </SwiperSlide>
               ))}
             </Swiper>
+
+            {/* Pagination Dots */}
+            <div className="testimonials-pagination flex justify-center mt-6"></div>
           </div>
         </ScrollAnimation>
       </div>
 
       <style jsx global>{`
+        .testimonials-pagination .swiper-pagination-bullet {
+          background-color: #d97706 !important;
+          opacity: 0.4 !important;
+        }
+        .testimonials-pagination .swiper-pagination-bullet-active {
+          background-color: #d97706 !important;
+          opacity: 1 !important;
+        }
+        .testimonials-carousel .swiper-pagination {
+          bottom: -20px !important;
+          margin-bottom: 0px;
+          position: relative !important;
+          display: block !important;
+          text-align: center !important;
+          width: 100% !important;
+          z-index: 10 !important;
+        }
         .testimonials-carousel .swiper-pagination-bullet {
-          background-color: #d1d5db;
-          opacity: 0.5;
+          width: 12px !important;
+          height: 12px !important;
+          margin: 0 6px !important;
+          display: inline-block !important;
+          border-radius: 50% !important;
+          cursor: pointer !important;
         }
-
-        .testimonials-carousel .swiper-pagination-bullet-active {
-          background-color: #d97706;
-          opacity: 1;
-        }
-
         .testimonials-carousel .swiper-slide {
           height: auto !important;
           display: flex !important;
           align-items: stretch;
         }
-
-        .testimonials-carousel .swiper-slide > div {
-          height: auto !important;
-          min-height: auto !important;
-          flex: 1;
-        }
-
         .testimonials-carousel .swiper-wrapper {
           align-items: flex-start !important;
         }
+        .testimonial-card-inner {
+          transition: height 0.3s ease;
+        }
 
-        /* Force recalculation on all testimonial cards */
-        .testimonials-carousel .swiper-slide .bg-white {
-          height: auto !important;
-          min-height: auto !important;
-          max-height: none !important;
+        /* Navigation arrows */
+        .testimonials-carousel .swiper-button-next,
+        .testimonials-carousel .swiper-button-prev {
+          color: #d97706 !important;
+          background: rgba(255, 255, 255, 0.7) !important;
+          border-radius: 50% !important;
+          width: 40px !important;
+          height: 40px !important;
+          margin-top: -20px !important;
+          backdrop-filter: blur(4px) !important;
+        }
+
+        .testimonials-carousel .swiper-button-next:after,
+        .testimonials-carousel .swiper-button-prev:after {
+          font-size: 16px !important;
+          font-weight: bold !important;
         }
       `}</style>
     </section>

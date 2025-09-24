@@ -49,34 +49,30 @@ const Resources = ({ resourcesData }: ResourcesProps) => {
                 delay: 6000,
                 disableOnInteraction: false,
               }}
-              className="resources-carousel pb-16"
+              className="resources-carousel pb-20"
               style={
                 {
-                  "--swiper-pagination-bottom": "0px",
+                  "--swiper-pagination-bottom": "-40px",
                 } as React.CSSProperties
               }
             >
               {resourcesData.map((resource) => (
                 <SwiperSlide key={resource._id} className="h-auto">
                   <div className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden h-full min-h-[400px]">
-                    <div className="flex flex-col md:flex-row h-full">
+                    <div className="flex flex-col h-full">
                       {resource.image?.asset?.url && (
-                        <div className="md:w-1/3 flex-shrink-0">
+                        <div className="w-full h-48 flex-shrink-0">
                           <Image
                             src={resource.image.asset.url}
                             alt={resource.image?.alt || resource.title}
                             width={400}
-                            height={300}
-                            className="w-full h-48 md:h-full object-cover"
+                            height={200}
+                            className="w-full h-full object-cover rounded-t-xl"
                           />
                         </div>
                       )}
 
-                      <div
-                        className={`p-6 flex flex-col justify-between flex-grow ${
-                          resource.image?.asset?.url ? "md:w-2/3" : "w-full"
-                        }`}
-                      >
+                      <div className="p-6 flex flex-col justify-between flex-grow w-full">
                         <div>
                           <h3 className="font-bold text-2xl mb-4 text-gray-800">
                             {resource.title}
@@ -135,6 +131,21 @@ const Resources = ({ resourcesData }: ResourcesProps) => {
           </div>
         </ScrollAnimation>
       </div>
+
+      <style jsx global>{`
+        .resources-carousel .swiper-pagination-bullet {
+          background-color: #fbe29c;
+          opacity: 0.7;
+        }
+        .resources-carousel .swiper-pagination-bullet-active {
+          background-color: #d97706;
+          opacity: 1;
+        }
+        .resources-carousel .swiper-pagination {
+          bottom: -40px !important;
+          margin-bottom: 0px;
+        }
+      `}</style>
     </section>
   );
 };

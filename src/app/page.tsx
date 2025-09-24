@@ -19,30 +19,60 @@ import {
   getResources,
   getAboutData,
   getTestimonials,
+  HeroData,
+  NavigationData,
+  FooterData,
+  PageData,
+  Service,
+  Resource,
+  AboutData,
+  Testimonial,
 } from "@/lib/sanity";
 import "../app/globals.css";
 
 export default async function Home() {
-  // Fetch data from Sanity
-  const [
-    heroData,
-    navigationData,
-    footerData,
-    footerPages,
-    servicesData,
-    resourcesData,
-    aboutData,
-    testimonialsData,
-  ] = await Promise.all([
-    getHeroData(),
-    getNavigationData(),
-    getFooterData(),
-    getFooterPages(),
-    getServices(),
-    getResources(),
-    getAboutData(),
-    getTestimonials(),
-  ]);
+  // Fetch data from Sanity with error handling
+  let heroData: HeroData | null;
+  let navigationData: NavigationData | null;
+  let footerData: FooterData | null;
+  let footerPages: PageData[];
+  let servicesData: Service[];
+  let resourcesData: Resource[];
+  let aboutData: AboutData | null;
+  let testimonialsData: Testimonial[];
+
+  try {
+    [
+      heroData,
+      navigationData,
+      footerData,
+      footerPages,
+      servicesData,
+      resourcesData,
+      aboutData,
+      testimonialsData,
+    ] = await Promise.all([
+      getHeroData(),
+      getNavigationData(),
+      getFooterData(),
+      getFooterPages(),
+      getServices(),
+      getResources(),
+      getAboutData(),
+      getTestimonials(),
+    ]);
+  } catch (error) {
+    console.error("Error fetching Sanity data:", error);
+    // Set all to null/undefined so components handle gracefully
+    heroData = null;
+    navigationData = null;
+    footerData = null;
+    footerPages = [];
+    servicesData = [];
+    resourcesData = [];
+    aboutData = null;
+    testimonialsData = [];
+  }
   return (
     <main className="flex flex-col min-h-screen bg-blueGray">
       <Header navigationData={navigationData || undefined} />

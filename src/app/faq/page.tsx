@@ -12,6 +12,10 @@ import {
   getFooterPages,
   PortableText,
   FAQ,
+  FAQCategory,
+  NavigationData,
+  FooterData,
+  PageData,
 } from "@/lib/sanity";
 import { portableTextComponents } from "@/components/PortableTextComponents";
 
@@ -63,14 +67,27 @@ function FAQItem({ faq }: { faq: FAQ }) {
 }
 
 export default async function FAQPage() {
-  // Fetch data from Sanity
-  const [faqCategories, navigationData, footerData, footerPages] =
-    await Promise.all([
-      getFAQs(),
-      getNavigationData(),
-      getFooterData(),
-      getFooterPages(),
-    ]);
+  // Fetch data from Sanity with error handling
+  let faqCategories: FAQCategory[];
+  let navigationData: NavigationData | null;
+  let footerData: FooterData | null;
+  let footerPages: PageData[];
+
+  try {
+    [faqCategories, navigationData, footerData, footerPages] =
+      await Promise.all([
+        getFAQs(),
+        getNavigationData(),
+        getFooterData(),
+        getFooterPages(),
+      ]);
+  } catch (error) {
+    console.error("Error fetching FAQ data:", error);
+    faqCategories = [];
+    navigationData = null;
+    footerData = null;
+    footerPages = [];
+  }
 
   return (
     <>

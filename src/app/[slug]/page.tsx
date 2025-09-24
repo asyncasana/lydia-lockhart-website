@@ -3,7 +3,13 @@ export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getPage, getFooterData, getFooterPages } from "@/lib/sanity";
+import {
+  getPage,
+  getFooterData,
+  getFooterPages,
+  PageData,
+  FooterData,
+} from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
 import { portableTextComponents } from "@/components/PortableTextComponents";
 import Footer from "@/components/Footer";
@@ -15,12 +21,23 @@ interface PageProps {
 export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Fetch page data, footer data, and footer pages
-  const [pageData, footerData, footerPages] = await Promise.all([
-    getPage(slug),
-    getFooterData(),
-    getFooterPages(),
-  ]);
+  // Fetch page data, footer data, and footer pages with error handling
+  let pageData: PageData | null;
+  let footerData: FooterData | null;
+  let footerPages: PageData[];
+
+  try {
+    [pageData, footerData, footerPages] = await Promise.all([
+      getPage(slug),
+      getFooterData(),
+      getFooterPages(),
+    ]);
+  } catch (error) {
+    console.error("Error fetching page data:", error);
+    pageData = null;
+    footerData = null;
+    footerPages = [];
+  }
 
   if (!pageData) {
     notFound();
@@ -73,35 +90,50 @@ export default async function DynamicPage({ params }: PageProps) {
 
 // Generate static params for all published pages
 export async function generateStaticParams() {
-  const pages = await fetch(
-    `https://rb1epwnp.api.sanity.io/v2024-01-01/data/query/production?query=${encodeURIComponent(
-      '*[_type == "page" && isPublished == true] { slug }'
-    )}`
-  ).then((res) => res.json());
+  try {
+    const pages = await fetch(
+      `https://rb1epwnp.api.sanity.io/v2024-01-01/data/query/production?query=${encodeURIComponent(
+        '*[_type == "page" && isPublished == true] { slug }'
+      )}`
+    ).then((res) => res.json());
 
-  return pages.result.map((page: { slug: { current: string } }) => ({
-    slug: page.slug.current,
-  }));
+    return pages.result.map((page: { slug: { current: string } }) => ({
+      slug: page.slug.current,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    // Return some default pages if Sanity fails
+    return [{ slug: "terms-and-conditions" }, { slug: "privacy-policy" }];
+  }
 }
 
 // Generate metadata for each page
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const pageData = await getPage(slug);
 
-  if (!pageData) {
+  try {
+    const pageData = await getPage(slug);
+
+    if (!pageData) {
+      return {
+        title: "Page Not Found",
+      };
+    }
+
     return {
-      title: "Page Not Found",
-    };
-  }
-
-  return {
-    title: `${pageData.title} | Lydia Lockhart`,
-    description: pageData.metaDescription || pageData.title,
-    openGraph: {
       title: `${pageData.title} | Lydia Lockhart`,
       description: pageData.metaDescription || pageData.title,
-      type: "article",
-    },
-  };
+      openGraph: {
+        title: `${pageData.title} | Lydia Lockhart`,
+        description: pageData.metaDescription || pageData.title,
+        type: "article",
+      },
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Page | Lydia Lockhart",
+      description: "Lydia Lockhart - Life Coach",
+    };
+  }
 }

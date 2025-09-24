@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import { Service } from "@/lib/sanity";
@@ -28,7 +26,7 @@ export default function Services({ servicesData }: ServicesProps) {
         </h2>
       </ScrollAnimation>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-2 ">
         {servicesData.map((service, index) => (
           <ScrollAnimation
             key={service._id}

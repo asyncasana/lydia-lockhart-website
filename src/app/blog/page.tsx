@@ -11,6 +11,10 @@ import {
   getNavigationData,
   getFooterData,
   getFooterPages,
+  BlogPost,
+  NavigationData,
+  FooterData,
+  PageData,
 } from "@/lib/sanity";
 
 export const metadata: Metadata = {
@@ -20,13 +24,26 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  // Fetch data from Sanity
-  const [posts, navigationData, footerData, footerPages] = await Promise.all([
-    getBlogPosts(),
-    getNavigationData(),
-    getFooterData(),
-    getFooterPages(),
-  ]);
+  // Fetch data from Sanity with error handling
+  let posts: BlogPost[];
+  let navigationData: NavigationData | null;
+  let footerData: FooterData | null;
+  let footerPages: PageData[];
+
+  try {
+    [posts, navigationData, footerData, footerPages] = await Promise.all([
+      getBlogPosts(),
+      getNavigationData(),
+      getFooterData(),
+      getFooterPages(),
+    ]);
+  } catch (error) {
+    console.error("Error fetching blog data:", error);
+    posts = [];
+    navigationData = null;
+    footerData = null;
+    footerPages = [];
+  }
 
   return (
     <>

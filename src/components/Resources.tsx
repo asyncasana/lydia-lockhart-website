@@ -52,7 +52,7 @@ const Resources = ({ resourcesData }: ResourcesProps) => {
               className="resources-carousel pb-16"
               style={
                 {
-                  ["--swiper-pagination-bottom" as any]: "0px",
+                  "--swiper-pagination-bottom": "0px",
                 } as React.CSSProperties
               }
             >

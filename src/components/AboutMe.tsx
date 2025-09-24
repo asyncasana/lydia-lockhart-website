@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AboutData } from "@/lib/sanity";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
 // Import Swiper styles
@@ -17,7 +18,7 @@ interface AboutMeProps {
 }
 
 const AboutMe = ({ aboutData }: AboutMeProps) => {
-  const [swiperRef, setSwiperRef] = React.useState<any>(null);
+  const [swiperRef, setSwiperRef] = React.useState<SwiperType | null>(null);
 
   // Only use Sanity data - no fallbacks to make issues visible
   if (!aboutData) {

@@ -67,27 +67,21 @@ const Header = ({ navigationData }: HeaderProps) => {
   const logoUrl = navigationData?.logo?.asset?.url;
 
   // Create dynamic navigation items including conditional Blog/FAQ links
-  let allNavItems = [...menuItems];
+  const blogLink = navigationData?.showBlogLink === true ? [{
+    label: "Blog",
+    url: "/blog",
+    isActive: true,
+    openInNewTab: false,
+  }] : [];
 
-  // Add Blog link only if explicitly enabled
-  if (navigationData?.showBlogLink === true) {
-    allNavItems.push({
-      label: "Blog",
-      url: "/blog",
-      isActive: true,
-      openInNewTab: false,
-    });
-  }
+  const faqLink = navigationData?.showFaqLink === true ? [{
+    label: "FAQ",
+    url: "/faq",
+    isActive: true,
+    openInNewTab: false,
+  }] : [];
 
-  // Add FAQ link only if explicitly enabled
-  if (navigationData?.showFaqLink === true) {
-    allNavItems.push({
-      label: "FAQ",
-      url: "/faq",
-      isActive: true,
-      openInNewTab: false,
-    });
-  }
+  const allNavItems = [...menuItems, ...blogLink, ...faqLink];
 
   return (
     <header className="w-full bg-white flex items-center justify-between mt-4 px-4 py-4 sticky top-0 z-50">

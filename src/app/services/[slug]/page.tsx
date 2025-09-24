@@ -223,12 +223,12 @@ export default async function ServicePage({ params }: ServicePageProps) {
                     </Link>
                   )
                 ) : (
-                  <a
+                  <Link
                     href="/#contact"
                     className="bg-yellow-600 hover:bg-yellow-500 text-white font-medium py-3 px-8 rounded-lg transition-all transform hover:scale-105 inline-block"
                   >
                     {service.ctaButton?.text || "Contact Us"}
-                  </a>
+                  </Link>
                 )}
                 <Link
                   href="/"

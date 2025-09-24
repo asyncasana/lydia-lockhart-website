@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Testimonial } from "@/lib/sanity";
 import ScrollAnimation from "./ScrollAnimation";
@@ -10,6 +10,13 @@ import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
+// Extend Window interface to include our custom function
+declare global {
+  interface Window {
+    recalculateTestimonialHeights?: () => void;
+  }
+}
 
 interface TestimonialsProps {
   testimonialsData?: Testimonial[];
@@ -32,8 +39,8 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
     setIsExpanded(!isExpanded);
     // Recalculate heights after content change
     setTimeout(() => {
-      if ((window as any).recalculateTestimonialHeights) {
-        (window as any).recalculateTestimonialHeights();
+      if (window.recalculateTestimonialHeights) {
+        window.recalculateTestimonialHeights();
       }
     }, 50);
   };
@@ -41,8 +48,8 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   // Trigger height recalculation when expansion state changes
   useEffect(() => {
     const timer = setTimeout(() => {
-      if ((window as any).recalculateTestimonialHeights) {
-        (window as any).recalculateTestimonialHeights();
+      if (window.recalculateTestimonialHeights) {
+        window.recalculateTestimonialHeights();
       }
     }, 100);
 
@@ -101,13 +108,11 @@ const Testimonials = ({
   testimonialsData,
   backgroundImage,
 }: TestimonialsProps) => {
-  const [cardHeight, setCardHeight] = useState<number | null>(null);
-
   // Debug logging
   console.log("Testimonials data:", testimonialsData);
 
   // Function to calculate and set uniform height
-  const calculateUniformHeight = () => {
+  const calculateUniformHeight = useCallback(() => {
     const cards = document.querySelectorAll(".testimonial-card-inner");
     if (cards.length === 0) return;
 
@@ -125,12 +130,11 @@ const Testimonials = ({
 
     // Set all cards to the tallest height
     if (maxHeight > 0) {
-      setCardHeight(maxHeight);
       cards.forEach((card) => {
         (card as HTMLElement).style.height = `${maxHeight}px`;
       });
     }
-  };
+  }, []);
 
   // Recalculate heights when testimonials data changes or component mounts
   useEffect(() => {
@@ -138,11 +142,11 @@ const Testimonials = ({
       calculateUniformHeight();
     }, 100);
     return () => clearTimeout(timer);
-  }, [testimonialsData]);
+  }, [testimonialsData, calculateUniformHeight]);
 
   // Make calculateUniformHeight available globally for card expansion
   useEffect(() => {
-    (window as any).recalculateTestimonialHeights = calculateUniformHeight;
+    window.recalculateTestimonialHeights = calculateUniformHeight;
 
     // Add window resize listener to recalculate heights
     const handleResize = () => {
@@ -152,10 +156,10 @@ const Testimonials = ({
     window.addEventListener("resize", handleResize);
 
     return () => {
-      delete (window as any).recalculateTestimonialHeights;
+      delete window.recalculateTestimonialHeights;
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [calculateUniformHeight]);
 
   if (!testimonialsData || testimonialsData.length === 0) {
     return (

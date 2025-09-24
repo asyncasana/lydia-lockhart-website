@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { HeroData } from "@/lib/sanity";
 import ScrollAnimation from "./ScrollAnimation";
 
@@ -73,12 +74,24 @@ const Hero = ({ heroData }: HeroProps) => {
         )}
         {ctaText && ctaUrl && (
           <ScrollAnimation animation="scale" delay={400}>
-            <a
-              href={ctaUrl}
-              className="inline-block bg-yellow-600 text-white font-semibold px-6 py-3 rounded-full shadow hover:bg-yellow-500 transition"
-            >
-              {ctaText}
-            </a>
+            {/* Use Link for internal navigation, a tag for external links */}
+            {ctaUrl.startsWith('http') || ctaUrl.startsWith('mailto:') ? (
+              <a
+                href={ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-yellow-600 text-white font-semibold px-6 py-3 rounded-full shadow hover:bg-yellow-500 transition"
+              >
+                {ctaText}
+              </a>
+            ) : (
+              <Link
+                href={ctaUrl}
+                className="inline-block bg-yellow-600 text-white font-semibold px-6 py-3 rounded-full shadow hover:bg-yellow-500 transition"
+              >
+                {ctaText}
+              </Link>
+            )}
           </ScrollAnimation>
         )}
       </div>

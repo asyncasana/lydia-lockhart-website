@@ -311,6 +311,27 @@ export async function getResources(): Promise<Resource[]> {
 }
 
 // About Types and Queries
+export interface AboutCarouselSection {
+  title: string;
+  image?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+  shortDescription: string;
+  slug: {
+    current: string;
+  };
+  longDescription?: unknown[]; // Portable Text content
+  ctaButton?: {
+    isVisible: boolean;
+    text?: string;
+    url?: string;
+    isExternal?: boolean;
+  };
+}
+
 export interface AboutData {
   _id: string;
   highlight?: string; // This is your "title" field
@@ -321,6 +342,7 @@ export interface AboutData {
     };
     alt?: string;
   };
+  carouselSections?: AboutCarouselSection[];
 }
 
 export async function getAboutData(): Promise<AboutData | null> {
@@ -332,11 +354,53 @@ export async function getAboutData(): Promise<AboutData | null> {
       image {
         asset->{url},
         alt
+      },
+      carouselSections[] {
+        title,
+        image {
+          asset->{url},
+          alt
+        },
+        shortDescription,
+        slug,
+        longDescription,
+        ctaButton {
+          isVisible,
+          text,
+          url,
+          isExternal
+        }
       }
     }`;
     return await sanityClient.fetch(query);
   } catch (error) {
     console.error("Error fetching about data:", error);
+    return null;
+  }
+}
+
+// Get individual carousel section for detail page
+export async function getAboutSection(slug: string): Promise<AboutCarouselSection | null> {
+  try {
+    const query = `*[_type == "about"][0].carouselSections[slug.current == $slug][0] {
+      title,
+      image {
+        asset->{url},
+        alt
+      },
+      shortDescription,
+      slug,
+      longDescription,
+      ctaButton {
+        isVisible,
+        text,
+        url,
+        isExternal
+      }
+    }`;
+    return await sanityClient.fetch(query, { slug });
+  } catch (error) {
+    console.error("Error fetching about section:", error);
     return null;
   }
 }

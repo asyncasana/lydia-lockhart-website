@@ -1,4 +1,5 @@
 import "./globals.css";
+import CookiesBannerWrapper from "@/components/CookiesBannerWrapper";
 
 export const metadata = {
   title: "Lydia Lockhart | Helping Little Minds Grow",
@@ -37,7 +38,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <CookiesBannerWrapper />
+      </body>
     </html>
   );
 }

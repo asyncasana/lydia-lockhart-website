@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ScrollAnimation from "./ScrollAnimation";
 
-const ContactForm = () => {
+interface ContactFormProps {
+  termsSlug?: string;
+  backgroundImageUrl?: string;
+}
+
+const ContactForm = ({ termsSlug, backgroundImageUrl }: ContactFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -42,8 +47,21 @@ const ContactForm = () => {
     }
   };
 
+  // Create dynamic styles for background image matching testimonials
+  const sectionStyle = backgroundImageUrl
+    ? {
+        backgroundImage: `linear-gradient(rgba(249, 250, 251, 0.85), rgba(249, 250, 251, 0.85)), url(${backgroundImageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }
+    : {};
+
   return (
-    <section className="w-full p-10 md:px-35 py-12 text-gray-900 shadow-md">
+    <section
+      className="w-full p-10 md:px-35 py-12 text-gray-900 shadow-md bg-blue-gray/10 relative"
+      style={sectionStyle}
+    >
       <ScrollAnimation animation="fadeUp" delay={0}>
         <h2 className="text-3xl text-center font-bold mb-4">Contact Form</h2>
       </ScrollAnimation>
@@ -91,7 +109,7 @@ const ContactForm = () => {
             <span>
               By submitting, I agree to the{" "}
               <Link
-                href="/terms-and-conditions"
+                href={`/${termsSlug || "terms-and-conditions"}`}
                 className="underline text-yellow-600"
               >
                 T&amp;Cs

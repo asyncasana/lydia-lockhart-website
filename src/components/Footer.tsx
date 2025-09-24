@@ -39,7 +39,7 @@ const Footer = ({ footerData, footerPages = [] }: FooterProps) => {
   const copyrightText =
     footerData?.copyrightText || `© ${new Date().getFullYear()} Lydia Lockhart`;
 
-  // Combine Sanity pages with additional links
+  // Combine Sanity pages with additional links - all managed in Sanity
   const allFooterLinks = [
     ...footerPages.map((page) => ({
       label: page.title,

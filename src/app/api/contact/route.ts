@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { getSettings } from "@/lib/sanity";
 
 export async function POST(request: NextRequest) {
   // Initialize Resend inside the function to avoid build-time issues
@@ -15,9 +16,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get contact email from environment (preferred) or Sanity settings (fallback)
+    let contactEmail = process.env.CONTACT_EMAIL;
+    if (!contactEmail) {
+      const settings = await getSettings();
+      contactEmail =
+        settings?.contactEmail || "llockhartlifecoaching@gmail.com";
+    }
+
     const data = await resend.emails.send({
       from: "Contact Form <onboarding@resend.dev>",
-      to: [process.env.CONTACT_EMAIL || "llockhartlifecoaching@gmail.com"],
+      to: [contactEmail],
       subject: `New Contact Form Submission from ${name}`,
       replyTo: email,
       html: `

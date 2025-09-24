@@ -7,9 +7,18 @@ export const about = defineType({
   fields: [
     // Main about section (for backward compatibility)
     defineField({name: 'bio', type: 'text', title: 'Main Bio'}),
-    defineField({name: 'image', type: 'image', title: 'Main Profile Image'}),
+    defineField({
+      name: 'image',
+      type: 'image',
+      title: 'Main Profile Image',
+      description:
+        'Upload image and use the crop/hotspot tool to adjust framing. Images will display as circles.',
+      options: {
+        hotspot: true,
+      },
+    }),
     defineField({name: 'highlight', type: 'string', title: 'Main Highlight/Quote'}),
-    
+
     // Carousel sections
     defineField({
       name: 'carouselSections',
@@ -29,9 +38,7 @@ export const about = defineType({
               name: 'image',
               type: 'image',
               title: 'Section Image',
-              options: {
-                hotspot: true,
-              },
+              description: 'Images will display as circles in both carousel and detail pages.',
             }),
             defineField({
               name: 'shortDescription',
@@ -76,12 +83,15 @@ export const about = defineType({
                   name: 'text',
                   type: 'string',
                   title: 'Button Text',
+                  hidden: ({parent}: {parent: any}) => !parent?.isVisible,
                 }),
                 defineField({
                   name: 'url',
-                  type: 'url',
+                  type: 'string',
                   title: 'Button URL',
-                  description: 'External URL or internal path (e.g., /contact)',
+                  description:
+                    'External URL or internal path (e.g., #contact, /services, https://example.com)',
+                  hidden: ({parent}: {parent: any}) => !parent?.isVisible,
                 }),
                 defineField({
                   name: 'isExternal',
@@ -89,9 +99,9 @@ export const about = defineType({
                   title: 'Is External Link',
                   description: 'Opens in new tab if external',
                   initialValue: false,
+                  hidden: ({parent}: {parent: any}) => !parent?.isVisible,
                 }),
               ],
-              hidden: ({parent}: {parent: any}) => !parent?.ctaButton?.isVisible,
             }),
           ],
           preview: {

@@ -33,6 +33,9 @@ export const hero = defineType({
           name: 'image',
           type: 'image',
           title: 'Background Image',
+          options: {
+            hotspot: true,
+          },
           hidden: ({parent}) => parent?.mediaType !== 'image',
         }),
       ],

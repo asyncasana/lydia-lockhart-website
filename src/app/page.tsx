@@ -19,6 +19,11 @@ import {
   getResources,
   getAboutData,
   getTestimonials,
+  getPageVisibility,
+  getLegalPageLinks,
+  getTestimonialsBackgroundImage,
+  getContactBackgroundImage,
+  getSettings,
   HeroData,
   NavigationData,
   FooterData,
@@ -27,6 +32,7 @@ import {
   Resource,
   AboutData,
   Testimonial,
+  Settings,
 } from "@/lib/sanity";
 import "../app/globals.css";
 
@@ -40,6 +46,11 @@ export default async function Home() {
   let resourcesData: Resource[];
   let aboutData: AboutData | null;
   let testimonialsData: Testimonial[];
+  let pageVisibility: { showBlogPage: boolean; showFaqPage: boolean };
+  let legalLinks: { termsSlug?: string; privacySlug?: string };
+  let testimonialsBackgroundImage: string | null;
+  let contactBackgroundImage: string | null;
+  let settings: Settings | null;
 
   try {
     [
@@ -51,6 +62,11 @@ export default async function Home() {
       resourcesData,
       aboutData,
       testimonialsData,
+      pageVisibility,
+      legalLinks,
+      testimonialsBackgroundImage,
+      contactBackgroundImage,
+      settings,
     ] = await Promise.all([
       getHeroData(),
       getNavigationData(),
@@ -60,7 +76,21 @@ export default async function Home() {
       getResources(),
       getAboutData(),
       getTestimonials(),
+      getPageVisibility(),
+      getLegalPageLinks(),
+      getTestimonialsBackgroundImage(),
+      getContactBackgroundImage(),
+      getSettings(),
     ]);
+
+    // Merge page visibility settings into navigationData
+    if (navigationData) {
+      navigationData = {
+        ...navigationData,
+        showBlogLink: pageVisibility.showBlogPage,
+        showFaqLink: pageVisibility.showFaqPage,
+      };
+    }
   } catch (error) {
     console.error("Error fetching Sanity data:", error);
     // Set all to null/undefined so components handle gracefully
@@ -72,6 +102,14 @@ export default async function Home() {
     resourcesData = [];
     aboutData = null;
     testimonialsData = [];
+    pageVisibility = { showBlogPage: false, showFaqPage: false };
+    legalLinks = {
+      termsSlug: "terms-and-conditions",
+      privacySlug: "privacy-policy",
+    };
+    testimonialsBackgroundImage = null;
+    contactBackgroundImage = null;
+    settings = null;
   }
   return (
     <main className="flex flex-col min-h-screen bg-blueGray">
@@ -83,16 +121,22 @@ export default async function Home() {
         <AboutMe aboutData={aboutData || undefined} />
       </section>
       <section id="testimonials" className="w-full">
-        <Testimonials testimonialsData={testimonialsData || undefined} />
+        <Testimonials
+          testimonialsData={testimonialsData || undefined}
+          backgroundImage={testimonialsBackgroundImage || undefined}
+        />
       </section>
       <section id="services" className="w-full">
         <Services servicesData={servicesData || undefined} />
       </section>
       <section id="booking" className="w-full">
-        <CalendlyEmbed />
+        <CalendlyEmbed calendlyUrl={settings?.calendlyUrl} />
       </section>
       <section id="contact" className="w-full">
-        <ContactForm />
+        <ContactForm
+          termsSlug={legalLinks.termsSlug}
+          backgroundImageUrl={contactBackgroundImage || undefined}
+        />
       </section>
       <section id="resources" className="w-full">
         <Resources resourcesData={resourcesData || undefined} />

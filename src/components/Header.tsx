@@ -63,21 +63,31 @@ const Header = ({ navigationData }: HeaderProps) => {
   const menuItems =
     navigationData?.menuItems?.filter((item) => item.isActive) ||
     defaultNavLinks.filter((item) => item.isActive);
-  const showBlogLink = navigationData?.showBlogLink ?? false;
-  const showFaqLink = navigationData?.showFaqLink ?? false;
   const ctaButton = navigationData?.ctaButton;
   const logoUrl = navigationData?.logo?.asset?.url;
 
-  // Create complete navigation array including conditional links
-  const allNavItems = [
-    ...menuItems,
-    ...(showBlogLink
-      ? [{ label: "Blog", url: "/blog", isActive: true, openInNewTab: false }]
-      : []),
-    ...(showFaqLink
-      ? [{ label: "FAQ", url: "/faq", isActive: true, openInNewTab: false }]
-      : []),
-  ];
+  // Create dynamic navigation items including conditional Blog/FAQ links
+  let allNavItems = [...menuItems];
+
+  // Add Blog link only if explicitly enabled
+  if (navigationData?.showBlogLink === true) {
+    allNavItems.push({
+      label: "Blog",
+      url: "/blog",
+      isActive: true,
+      openInNewTab: false,
+    });
+  }
+
+  // Add FAQ link only if explicitly enabled
+  if (navigationData?.showFaqLink === true) {
+    allNavItems.push({
+      label: "FAQ",
+      url: "/faq",
+      isActive: true,
+      openInNewTab: false,
+    });
+  }
 
   return (
     <header className="w-full bg-white flex items-center justify-between mt-4 px-4 py-4 sticky top-0 z-50">
@@ -123,7 +133,7 @@ const Header = ({ navigationData }: HeaderProps) => {
             href={ctaButton.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-4 px-4 py-2 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors"
+            className="ml-4 px-4 py-2 bg-yellow-600 text-white font-medium rounded-lg hover:bg-yellow-500 transition-colors"
           >
             {ctaButton.text}
           </a>
@@ -174,7 +184,7 @@ const Header = ({ navigationData }: HeaderProps) => {
               href={ctaButton.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 px-4 py-2 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors"
+              className="mt-4 px-4 py-2 bg-yellow-600 text-white font-medium rounded-lg hover:bg-yellow-500 transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               {ctaButton.text}

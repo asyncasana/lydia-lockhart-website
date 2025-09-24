@@ -71,20 +71,6 @@ export const navigation = defineType({
       ],
     }),
     defineField({
-      name: 'showBlogLink',
-      type: 'boolean',
-      title: 'Show Blog Link',
-      description: 'Display blog link in navigation',
-      initialValue: false,
-    }),
-    defineField({
-      name: 'showFaqLink',
-      type: 'boolean',
-      title: 'Show FAQ Link',
-      description: 'Display FAQ link in navigation',
-      initialValue: false,
-    }),
-    defineField({
       name: 'ctaButton',
       type: 'object',
       title: 'CTA Button',
@@ -96,8 +82,10 @@ export const navigation = defineType({
         }),
         defineField({
           name: 'url',
-          type: 'url',
+          type: 'string',
           title: 'Button URL',
+          description: 'Use "#contact" for anchor links or full URLs',
+          placeholder: '#contact',
         }),
         defineField({
           name: 'isVisible',
@@ -106,6 +94,20 @@ export const navigation = defineType({
           initialValue: true,
         }),
       ],
+    }),
+    defineField({
+      name: 'showBlogLink',
+      type: 'boolean',
+      title: 'Show Blog in Navigation',
+      description: 'Toggle to show/hide Blog link in navigation bar',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'showFaqLink',
+      type: 'boolean',
+      title: 'Show FAQ in Navigation',
+      description: 'Toggle to show/hide FAQ link in navigation bar',
+      initialValue: false,
     }),
   ],
   preview: {

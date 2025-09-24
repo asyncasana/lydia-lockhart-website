@@ -75,7 +75,7 @@ const Hero = ({ heroData }: HeroProps) => {
         {ctaText && ctaUrl && (
           <ScrollAnimation animation="scale" delay={400}>
             {/* Use Link for internal navigation, a tag for external links */}
-            {ctaUrl.startsWith('http') || ctaUrl.startsWith('mailto:') ? (
+            {ctaUrl.startsWith("http") || ctaUrl.startsWith("mailto:") ? (
               <a
                 href={ctaUrl}
                 target="_blank"

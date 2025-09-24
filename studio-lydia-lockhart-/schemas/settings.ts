@@ -7,7 +7,76 @@ export const settings = defineType({
   fields: [
     defineField({name: 'contactEmail', type: 'string', title: 'Contact Email'}),
     defineField({name: 'calendlyUrl', type: 'url', title: 'Calendly Link'}),
-    defineField({name: 'logo', type: 'image', title: 'Logo'}),
+    defineField({
+      name: 'seoSettings',
+      type: 'object',
+      title: 'SEO & Social Sharing',
+      fields: [
+        defineField({
+          name: 'metaTitle',
+          type: 'string',
+          title: 'Site Title',
+          description: 'Default title for the website',
+          validation: (Rule) => Rule.max(60),
+        }),
+        defineField({
+          name: 'metaDescription',
+          type: 'text',
+          title: 'Site Description',
+          description: 'Default description for the website',
+          validation: (Rule) => Rule.max(160),
+        }),
+        defineField({
+          name: 'ogImage',
+          type: 'image',
+          title: 'Social Share Image',
+          description:
+            'Default image when sharing website links on social media (1200x630px recommended)',
+        }),
+      ],
+    }),
+    defineField({
+      name: 'testimonialsBackgroundImage',
+      type: 'image',
+      title: 'Testimonials Background Image',
+      description:
+        'Optional background image for the testimonials section (will be phased/blended)',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'contactBackgroundImage',
+      type: 'image',
+      title: 'Contact Form Background Image',
+      description:
+        'Optional background image for the contact form section (will be phased/blended)',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'pageVisibility',
+      type: 'object',
+      title: 'Page Visibility Settings',
+      description: 'Control which pages appear in navigation and footer',
+      fields: [
+        defineField({
+          name: 'showBlogPage',
+          type: 'boolean',
+          title: 'Show Blog Page',
+          description: 'Show/hide Blog page in navigation and footer',
+          initialValue: true,
+        }),
+        defineField({
+          name: 'showFaqPage',
+          type: 'boolean',
+          title: 'Show FAQ Page',
+          description: 'Show/hide FAQ page in navigation and footer',
+          initialValue: true,
+        }),
+      ],
+    }),
     defineField({
       name: 'footer',
       type: 'object',

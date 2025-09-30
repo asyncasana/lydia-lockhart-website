@@ -146,14 +146,20 @@ export interface Settings {
       url: string;
     };
     alt?: string;
-    hotspot?: any;
+    hotspot?: {
+      x: number;
+      y: number;
+    };
   };
   contactBackgroundImage?: {
     asset: {
       url: string;
     };
     alt?: string;
-    hotspot?: any;
+    hotspot?: {
+      x: number;
+      y: number;
+    };
   };
 }
 

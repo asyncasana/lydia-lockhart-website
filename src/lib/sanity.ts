@@ -123,6 +123,7 @@ export interface Settings {
       asset: {
         url: string;
       };
+      alt?: string;
     };
   };
   footer?: FooterData;
@@ -682,7 +683,8 @@ export async function getSettings(): Promise<Settings | null> {
         metaTitle,
         metaDescription,
         ogImage {
-          asset->{url}
+          asset->{url},
+          alt
         }
       },
       pageVisibility {

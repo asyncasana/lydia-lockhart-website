@@ -97,13 +97,15 @@ const Header = ({ navigationData }: HeaderProps) => {
     <header className="w-full bg-white flex items-center justify-between mt-4 px-4 py-4 sticky top-0 z-50">
       {/* Logo */}
       <Link href="/">
-        <Image
-          src={logoUrl || "/wide-logo.svg"}
-          alt="Lydia Lockhart Logo, line art of a dog and a child"
-          width={300}
-          height={100}
-          draggable={false}
-        />
+        {logoUrl && (
+          <Image
+            src={logoUrl}
+            alt="Lydia Lockhart Logo, line art of a dog and a child"
+            width={300}
+            height={100}
+            draggable={false}
+          />
+        )}
       </Link>
 
       {/* Desktop Nav */}

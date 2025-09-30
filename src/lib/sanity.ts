@@ -110,23 +110,51 @@ export interface FooterData {
 
 // Settings Types and Queries
 export interface Settings {
+  siteTitle?: string;
+  siteUrl?: string;
   contactEmail?: string;
   calendlyUrl?: string;
-  pageVisibility?: {
-    showBlogPage?: boolean;
-    showFaqPage?: boolean;
-  };
+  phoneNumber?: string;
   seoSettings?: {
     metaTitle?: string;
     metaDescription?: string;
-    ogImage?: {
+    keywords?: string[];
+    favicon?: {
       asset: {
         url: string;
       };
       alt?: string;
     };
   };
+  socialSharing?: {
+    ogImage?: {
+      asset: {
+        url: string;
+      };
+      alt?: string;
+    };
+    twitterHandle?: string;
+    facebookAppId?: string;
+  };
+  pageVisibility?: {
+    showBlogPage?: boolean;
+    showFaqPage?: boolean;
+  };
   footer?: FooterData;
+  testimonialsBackgroundImage?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+    hotspot?: any;
+  };
+  contactBackgroundImage?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+    hotspot?: any;
+  };
 }
 
 export async function getFooterData(): Promise<FooterData | null> {
@@ -677,19 +705,55 @@ export async function getFooterPages(): Promise<PageData[]> {
 export async function getSettings(): Promise<Settings | null> {
   try {
     const query = `*[_type == "settings"][0] {
+      siteTitle,
+      siteUrl,
       contactEmail,
       calendlyUrl,
+      phoneNumber,
       seoSettings {
         metaTitle,
         metaDescription,
-        ogImage {
+        keywords,
+        favicon {
           asset->{url},
           alt
         }
       },
+      socialSharing {
+        ogImage {
+          asset->{url},
+          alt
+        },
+        twitterHandle,
+        facebookAppId
+      },
       pageVisibility {
         showBlogPage,
         showFaqPage
+      },
+      footer {
+        footerText,
+        copyrightText,
+        socialLinks[] {
+          platform,
+          url,
+          isVisible
+        },
+        additionalLinks[] {
+          label,
+          url,
+          isVisible
+        }
+      },
+      testimonialsBackgroundImage {
+        asset->{url},
+        alt,
+        hotspot
+      },
+      contactBackgroundImage {
+        asset->{url},
+        alt,
+        hotspot
       }
     }`;
     return await sanityClient.fetch(query);

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Service } from "@/lib/sanity";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
+import { Pagination, Navigation } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
@@ -65,7 +65,7 @@ export default function Services({ servicesData }: ServicesProps) {
             </div>
 
             <Swiper
-              modules={[Pagination, Autoplay, Navigation]}
+              modules={[Pagination, Navigation]}
               spaceBetween={20}
               slidesPerView={1}
               pagination={{
@@ -76,10 +76,6 @@ export default function Services({ servicesData }: ServicesProps) {
               navigation={{
                 nextEl: ".services-button-next",
                 prevEl: ".services-button-prev",
-              }}
-              autoplay={{
-                delay: 6000,
-                disableOnInteraction: false,
               }}
               breakpoints={{
                 640: {

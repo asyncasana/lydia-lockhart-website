@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Resource } from "@/lib/sanity";
 import ScrollAnimation from "./ScrollAnimation";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
@@ -38,16 +38,12 @@ const Resources = ({ resourcesData }: ResourcesProps) => {
         <ScrollAnimation animation="fadeUp" delay={200}>
           <div className="px-4 md:px-6">
             <Swiper
-              modules={[Pagination, Autoplay]}
+              modules={[Pagination]}
               spaceBetween={0}
               slidesPerView={1}
               pagination={{
                 clickable: true,
                 dynamicBullets: true,
-              }}
-              autoplay={{
-                delay: 6000,
-                disableOnInteraction: false,
               }}
               className="resources-carousel pb-20"
               style={

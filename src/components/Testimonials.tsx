@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Testimonial } from "@/lib/sanity";
 import ScrollAnimation from "./ScrollAnimation";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
+import { Pagination, Navigation } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
@@ -222,7 +222,7 @@ const Testimonials = ({
             </div>
 
             <Swiper
-              modules={[Pagination, Autoplay, Navigation]}
+              modules={[Pagination, Navigation]}
               spaceBetween={20}
               slidesPerView={1}
               pagination={{
@@ -233,10 +233,6 @@ const Testimonials = ({
               navigation={{
                 nextEl: ".testimonials-button-next",
                 prevEl: ".testimonials-button-prev",
-              }}
-              autoplay={{
-                delay: 6000,
-                disableOnInteraction: false,
               }}
               breakpoints={{
                 640: {

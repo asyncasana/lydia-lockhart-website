@@ -6,7 +6,7 @@ import { AboutData } from "@/lib/sanity";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
@@ -51,15 +51,11 @@ const AboutMe = ({ aboutData }: AboutMeProps) => {
           <div className="mt-8 relative">
             <ScrollAnimation animation="fadeUp" delay={400}>
               <Swiper
-                modules={[Navigation, Pagination, Autoplay]}
+                modules={[Navigation, Pagination]}
                 spaceBetween={30}
                 slidesPerView={1}
                 navigation
                 pagination={{ clickable: true }}
-                autoplay={{
-                  delay: 5000,
-                  disableOnInteraction: false,
-                }}
                 onSwiper={setSwiperRef}
                 className="about-carousel"
               >

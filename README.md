@@ -1,6 +1,29 @@
-# Lydia Lockhart Website
+# Lydia Lockhart Lifecoaching Website
 
-This project is a modern website for Lydia Lockhart, built with [Next.js](https://nextjs.org) and powered by [Sanity Studio](https://www.sanity.io/) for content management.
+Modern, accessible, and fully CMS-driven website for Lydia Lockhart Lifecoaching.
+
+**Tech Stack:**
+
+- [Next.js 15](https://nextjs.org/) (App Router, TypeScript)
+- [Sanity Studio](https://www.sanity.io/) (Headless CMS)
+- [Tailwind CSS](https://tailwindcss.com/) (utility-first styling)
+- [Swiper.js](https://swiperjs.com/) (carousels, manual swipe only)
+- [Vercel](https://vercel.com/) (hosting & CI/CD)
+
+---
+
+---
+
+## ✨ Features
+
+- Fully editable via Sanity Studio (no code required for content updates)
+- Responsive, mobile-first design
+- Accessible navigation and semantic HTML
+- Blog, FAQ, and resource sections
+- Contact form with email delivery (Resend API)
+- Manual-only carousels (no auto-swiping)
+- SEO and social sharing optimized
+- Modern, recruiter-friendly codebase
 
 ---
 
@@ -13,10 +36,10 @@ All website content is managed via Sanity Studio:
 
 ### Content Structure
 
-- **Settings:** Site-wide info (contact, social links, etc.)
-- **Navigation:** Main menu links
+- **Settings:** Site-wide info (contact, social links, SEO, etc.)
+- **Navigation:** Main menu links (fully CMS-driven)
 - **Homepage Sections:** Hero, About, Services, Testimonials, Resources
-- **Blog:** Blog posts
+- **Blog:** Blog posts (rich text, images, SEO fields)
 - **FAQ:** Frequently asked questions
 - **Legal Pages:** Terms, Privacy Policy, etc.
 
@@ -56,6 +79,19 @@ All website content is managed via Sanity Studio:
 
 ---
 
+## 🗂️ Project Structure
+
+```
+src/
+	app/         # Next.js app directory (routing, pages)
+	components/  # Reusable React components
+	lib/         # Sanity client, helpers
+studio-lydia-lockhart-/ # Sanity Studio (CMS config)
+public/        # Static assets (empty, all images managed by Sanity)
+```
+
+---
+
 ## 🛠️ Local Development
 
 First, run the development server:
@@ -82,9 +118,28 @@ Add these in Vercel → Project → Settings → Environment Variables.
 
 ---
 
+## 🤝 Contributing & Testing
+
+This project is production-ready and follows best practices for accessibility, performance, and maintainability. To contribute or run tests:
+
+- Fork and clone the repo
+- `npm install`
+- `npm run lint` (check code style)
+- `npm run build` (type-check and build)
+- `npm run dev` (start local dev server)
+
+---
+
 ## 📚 Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Sanity Documentation](https://www.sanity.io/docs)
+
+---
+
+## 📝 Notable Customizations
+
+- **Carousels:** All carousels (testimonials, resources, about, services) are now manual-only. Auto-swiping is disabled for improved accessibility and user control.
+- **No local images:** All images and assets are managed via Sanity CMS for a fully headless workflow.
 
 ---
